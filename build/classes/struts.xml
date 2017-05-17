@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+     <package name="main" namespace="/" extends="struts-default"  >
+         <!-- 定义一个拦截器 -->
+         <interceptors>
+             <interceptor name="autority" class="interceptor.MyInterceptor">
+                 <param name="excludeMethods">login</param>
+             </interceptor>
+             <!-- 拦截器栈 -->
+             <interceptor-stack name="myStack">
+                 <interceptor-ref name="defaultStack"></interceptor-ref>
+                 <interceptor-ref name="autority"></interceptor-ref>
+             </interceptor-stack>
+         </interceptors>
+         <!-- 定义全局Result -->  
+        <global-results>  
+            <!-- 当返回toLogin视图名时，转入index.jsp页面 -->  
+            <result name="toLogin">index.jsp</result>  
+        </global-results>  
+         <action name="UserAction_*"  class="action.UserAction" method="{1}">
+             <interceptor-ref name="myStack"></interceptor-ref>
+             <result name="input">index.jsp</result>
+             <result name="loginSuccess">WEB-INF/loginSuccess.jsp</result>
+             <result name="serchFailure">WEB-INF/loginSuccess.jsp</result>
+             <result name="serchSuccess">WEB-INF/serchSuccess.jsp</result>
+             <result name="serchNull">WEB-INF/serchNull.jsp</result>
+             <result name="downSuccess">WEB-INF/downSuccess.jsp</result>
+             <result name="downFailure">WEB-INF/downFailure.jsp</result>
+             <result name="toSerch">WEB-INF/loginSuccess.jsp</result>
+         </action>
+    </package>
+   <!-- 设置struts后缀，还可以在web.xml文件中用初始化参数来配置 -->
+  <!--  <constant name="struts.action.extension" value=""></constant> -->
+</struts>
